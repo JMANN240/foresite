@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% block head %}
+	<link rel="stylesheet" href="/static/base.css" type="text/css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>{{site_settings['name']}} - {{title}}</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<meta name="description" content="Every podcast at your fingertips.">
+
+	<meta property="og:url" content="https://ramble-bot.com">
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="{{site_settings['name']}} - {{title}}">
+	<meta property="og:description" content="Every podcast at your fingertips.">
+	<meta property="og:image" content="/static/preview.png">
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta property="twitter:domain" content="ramble-bot.com">
+	<meta property="twitter:url" content="https://ramble-bot.com">
+	<meta name="twitter:title" content="{{site_settings['name']}} - {{title}}">
+	<meta name="twitter:description" content="Every podcast at your fingertips.">
+	<meta name="twitter:image" content="/static/preview.png">
+
+	<style>
+		:root {
+			--primary: {{site_settings['primary-color']}};
+			--secondary: {{site_settings['secondary-color']}};
+			--tertiary: {{site_settings['tertiary-color']}};
+			--danger: {{site_settings['danger-color']}};
+		}
+	</style>
+	{% endblock %}
+</head>
+<body>
+	<div class="popup-container">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<div class="popup {{category}}" style="--delay: {{0.25 * loop.index0}};">
+						<p>{{message}}</p>
+					</div>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+	</div>
+	{% block header %}
+	<header>
+		{% for text, link in site_header_links.items() %}
+		<a href="{{link}}">{{text}}</a>
+		<span></span>
+		{% endfor %}
+		{% if user_session is none %}
+		<a href="{{url_for('login')}}">Login</a>
+		<span></span>
+		<a href="{{url_for('register')}}">Register</a>
+		{% else %}
+		<a href="{{url_for('account')}}">Account</a>
+		{% endif %}
+	</header>
+	{% endblock %}
+	{% block body %}
+	<main>
+	</main>
+	{% endblock %}
+	{% block footer %}
+	<footer class="smaller">
+		<p>&copy; 2023 {{site_settings['name']}}</p>
+		<p>
+			<a class="underlined" href="{{url_for('support')}}">Support</a>
+			<a class="underlined" href="{{url_for('terms')}}">Terms and Conditions</a>
+			<a class="underlined" href="{{url_for('privacy')}}">Privacy Policy</a>
+		</p>
+	</footer>
+	{% endblock %}
+</body>
+
+</html>

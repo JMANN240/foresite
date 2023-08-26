@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block body %}
+<main class="center">
+	<h1>Admin Dashboard</h1>
+	<h2>Site Settings</h2>
+	<form method="post">
+		{% for key, value in site_settings.items() %}
+		<label for="{{key}}-input">{{key}}</label>
+		<input type="text" value="{{value}}" id="{{key}}-input" name="{{key}}">
+		{% endfor %}
+		<input type="submit" value="Update" class="btn filled">
+	</form>
+	<h2>Pages</h2>
+	<a href="/admin/create_page" class="btn">Create Page</a>
+	{% for site_page in site_pages %}
+	<a href="/admin{{site_page['route']}}" class="btn">{{site_page['title']}}</a>
+	{% endfor %}
+</main>
+{% endblock %}

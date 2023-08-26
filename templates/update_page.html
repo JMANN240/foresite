@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body %}
+<main class="center">
+	<h1>Update Page</h1>
+	<form method="post">
+		<label for="route-input">Route</label>
+		<input type="text" id="route-input" name="route" value="{{page['route']}}" readonly>
+		<label for="title-input">Title</label>
+		<input type="text" id="title-input" name="title" value="{{page['title']}}">
+		<label for="content-input">Content</label>
+		<textarea id="content-input" name="content">{{page['content']}}</textarea>
+		<button class="btn filled">Update</button>
+	</form>
+	<a href="/admin/delete{{page['route']}}"><button class="btn danger">Delete</button></a>
+</main>
+{% endblock %}
