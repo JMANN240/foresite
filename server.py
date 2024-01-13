@@ -221,6 +221,7 @@ def admin():
 		con = request.db
 		cur = con.cursor()
 		setSiteSettings(cur, dict(request.form))
+		generateFavicon(request.form['name'][0], request.form['primary-color'], request.form['secondary-color'], serifs=True).save('static/favicon-32.png')
 		con.commit()
 		return uncached_redirect(url_for('admin'))
 

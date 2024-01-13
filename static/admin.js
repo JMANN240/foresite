@@ -17,11 +17,9 @@ const whiteOrBlack = (hexColor) => {
 }
 
 inputs.forEach((input) => {
-	console.log(input);
 	setBackgroundToValue(input);
 
 	input.addEventListener('input', () => {
-		console.log('input');
 		setBackgroundToValue(input);
 	});
 });

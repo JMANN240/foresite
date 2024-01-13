@@ -2,6 +2,7 @@ from flask import make_response, redirect, request, url_for, flash
 from functools import wraps
 import re
 import sqlite3
+from PIL import Image, ImageDraw, ImageFont
 
 def dict_factory(cursor, row):
 	d = {}
@@ -136,3 +137,13 @@ def renderMarkdown(markdown):
 				html_lines.append(line_re.replacement_function(match))
 				break
 	return '\n'.join(html_lines)
+
+def generateFavicon(letter, fg, bg, size=32, serifs=False):
+	image = Image.new("RGBA", (size, size), bg)
+	font_family = "EBGaramond-Bold.ttf" if serifs else "Roboto-Bold.ttf"
+	font = ImageFont.truetype(font_family, size)
+	_, top, _, bottom = font.getbbox(letter)
+	height = bottom-top
+	draw = ImageDraw.Draw(image)
+	draw.text((size/2, (size/2)+(height/2)), letter, font=font, fill=fg, anchor='mb')
+	return image

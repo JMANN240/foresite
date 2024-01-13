@@ -154,6 +154,10 @@ input[type=email], input[type=text], input[type=password], textarea, .radio-labe
 	cursor: pointer;
 }
 
+a.btn {
+	text-decoration: none;
+}
+
 .btn.filled {
 	color: var(--secondary);
 	background-color: var(--primary);
