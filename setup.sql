@@ -42,13 +42,11 @@ CREATE TABLE site_header_links (
 	PRIMARY KEY (position)
 );
 
-INSERT INTO site_header_links (text, link) VALUES ('Home', '/');
-INSERT INTO site_header_links (text, link) VALUES ('About', '/about');
-INSERT INTO site_header_links (text, link) VALUES ('Gallery', '/gallery');
-
-CREATE TABLE site_pages (
-	route TEXT,
+CREATE TABLE posts (
+	post_id TEXT PRIMARY KEY,
 	title TEXT,
+	author TEXT,
+	timestamp INTEGER,
 	content TEXT,
-	PRIMARY KEY (route)
+	summary TEXT
 );

@@ -1,5 +1,6 @@
 import os
 import time
+import uuid
 
 def getExamplePodcasts(cursor):
 	res = cursor.execute('SELECT * FROM example_podcasts INNER JOIN podcasts ON example_podcasts.podcast_id = podcasts.podcast_id')
@@ -100,17 +101,23 @@ def setSiteSettings(cursor, key_values):
 def getSiteHeaderLinks(cursor):
 	return {row['text']: row['link'] for row in cursor.execute("SELECT * FROM site_header_links").fetchall()}
 
-def getSitePages(cursor):
-	return cursor.execute("SELECT * FROM site_pages").fetchall()
+def getPosts(cursor):
+	return cursor.execute("SELECT * FROM posts").fetchall()
 
-def getSitePageByRoute(cursor, route):
-	return cursor.execute("SELECT * FROM site_pages WHERE route=?", (route,)).fetchone()
+def getPostById(cursor, id):
+	return cursor.execute("SELECT * FROM posts WHERE post_id=?", (id,)).fetchone()
 
-def createSitePage(cursor, title, route, content):
-	cursor.execute('INSERT INTO site_pages (title, route, content) VALUES (?, ?, ?)', (title, route, content))
+def createPost(cursor, title, author, timestamp, content, summary):
+	cursor.execute('INSERT INTO posts (post_id, title, author, timestamp, content, summary) VALUES (?, ?, ?, ?, ?, ?)', (str(uuid.uuid4()), title, author, timestamp, content, summary))
 
-def updateSitePageByRoute(cursor, route, title, content):
-	cursor.execute('UPDATE site_pages SET title=?, content=? WHERE route=?', (title, content, route))
+def createPostNow(cursor, title, author, content, summary):
+	createPost(cursor, title, author, int(time.time()), content, summary)
 
-def deleteSitePageByRoute(cursor, route):
-	cursor.execute('DELETE FROM site_pages WHERE route=?', (route,))
+def updatePostById(cursor, id, title, author, timestamp, content, summary):
+	cursor.execute('UPDATE posts SET title=?, author=?, timestamp=?, content=?, summary=? WHERE post_id=?', (title, author, timestamp, content, summary, id))
+
+def updatePostByIdNow(cursor, id, title, author, content, summary):
+	updatePostById(cursor, id, title, author, int(time.time()), content, summary)
+
+def deletePostById(cursor, id):
+	cursor.execute('DELETE FROM posts WHERE post_id=?', (id,))

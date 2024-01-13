@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+<main class="center">
+	<h1>Update Post</h1>
+	<form method="post">
+		<label for="id-input">ID</label>
+		<input type="text" id="id-input" name="route" value="{{post['post_id']}}" readonly>
+		<label for="title-input">Title</label>
+		<input type="text" id="title-input" name="title" value="{{post['title']}}">
+		<label for="author-input">Author</label>
+		<input type="text" id="author-input" name="author" value="{{post['author']}}">
+		<label for="content-input">Content</label>
+		<textarea id="content-input" name="content">{{post['content']}}</textarea>
+		<label for="summary-input">Summary</label>
+		<input type="text" id="summary-input" name="summary" value="{{post['summary']}}">
+		<button class="btn filled">Update</button>
+	</form>
+	<a href="/admin/delete/post/{{post['id']}}"><button class="btn danger">Delete</button></a>
+</main>
+{% endblock %}

@@ -2,6 +2,6 @@
 {% block body %}
 <main class="center">
 	<h1>{{user_session['username']}}</h1>
-	<a href="/logout" class="btn">Logout</a>
+	<a href="{{url_for('account')}}" class="btn">Logout</a>
 </main>
 {% endblock %}

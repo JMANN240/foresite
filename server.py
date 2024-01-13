@@ -14,26 +14,33 @@ def inject_user_session():
 	cur = con.cursor()
 	site_settings = getSiteSettings(cur)
 	site_header_links = getSiteHeaderLinks(cur)
-	site_pages = getSitePages(cur)
-	return dict(user_session=user_session, site_settings=site_settings, site_header_links=site_header_links, site_pages=site_pages)
+	posts = getPosts(cur)
+	return dict(user_session=user_session, site_settings=site_settings, site_header_links=site_header_links, posts=posts)
 
 @app.errorhandler(404)
 def notFound(e):
-	return render_template('404.html', title='404 Not Found', path=request.path)
+	return render_template('404.html', title='404 Not Found')
 
 @app.route('/')
-def index():
-	return uncached_redirect('/home')
-
-@app.route('/<path:path>')
 @requires_db
-def path(path):
-	path = f'/{path}'
+def index():
 	cur = request.db.cursor()
-	site_page = getSitePageByRoute(cur, path)
-	if site_page is None:
+	site_settings = getSiteSettings(cur)
+	posts = getPosts(cur)
+	content = f"# {site_settings['name']}\n\n### A blog about {site_settings['topic']}.\n\n## Recent posts\n\n---\n\n"
+	for post in posts:
+		content += f"### <a href='/post/{post['post_id']}'>{post['title']}</a> by {post['author']}\n\n{post['summary']}\n\n---\n\n"
+	return render_template('post.html', main=renderMarkdown(content), title='Home')
+
+@app.route('/post/<id>')
+@requires_db
+def post(id):
+	cur = request.db.cursor()
+	post = getPostById(cur, id)
+	if post is None:
 		abort(404)
-	return render_template('path.html', main=renderMarkdown(site_page['content']), title=site_page['title'])
+	content = f"# {post['title']}\n\nBy {post['author']}\n\n---\n\n{post['content']}"
+	return render_template('post.html', main=renderMarkdown(content), title=post['title'])
 
 @app.route('/support')
 def support():
@@ -217,47 +224,43 @@ def admin():
 		con.commit()
 		return uncached_redirect(url_for('admin'))
 
-@app.route('/admin/<path:path>', methods=['GET', 'POST'])
+@app.route('/admin/post/<id>', methods=['GET', 'POST'])
 @requires_authority(1)
 @requires_db
-def updatePage(path):
-	path = f'/{path}'
+def updatePost(id):
 	con = request.db
 	cur = con.cursor()
 	if request.method == 'GET':
-		page = getSitePageByRoute(cur, path)
-		return render_template('update_page.html', title='Update Page', page=page)
+		post = getPostById(cur, id)
+		return render_template('update_post.html', title='Update Post', post=post)
 
 	elif request.method == 'POST':
-		updateSitePageByRoute(cur, request.form['route'], request.form['title'], request.form['content'])
+		updatePostByIdNow(cur, id, request.form['title'], request.form['author'], request.form['content'], request.form['summary'])
 		con.commit()
 		flash('Update Successful')
-		return uncached_redirect(url_for('updatePage', path=path[1:]))
-
-@app.route('/admin/delete/<path:path>')
-@requires_authority(1)
-@requires_db
-def deletePage(path):
-	path = f'/{path}'
-	con = request.db
-	cur = con.cursor()
-	cur = request.db.cursor()
-	if request.method == 'GET':
-		deleteSitePageByRoute(cur, path)
-		con.commit()
 		return uncached_redirect(url_for('admin'))
 
-@app.route('/admin/create_page', methods=['GET', 'POST'])
+@app.route('/admin/delete/post/<id>')
 @requires_authority(1)
 @requires_db
-def createPage():
+def deletePost(id):
+	con = request.db
+	cur = con.cursor()
+	deletePostById(cur, id)
+	con.commit()
+	return uncached_redirect(url_for('admin'))
+
+@app.route('/admin/create_post', methods=['GET', 'POST'])
+@requires_authority(1)
+@requires_db
+def createPost():
 	if request.method == 'GET':
-		return render_template('create_page.html', title='Create Page', route=request.args.get('path', ''))
+		return render_template('create_post.html', title='Create Post')
 
 	elif request.method == 'POST':
 		con = request.db
 		cur = con.cursor()
-		createSitePage(cur, request.form['title'], request.form['route'], request.form['content'])
+		createPostNow(cur, request.form['title'], request.form['author'], request.form['content'], request.form['summary'])
 		con.commit()
 		return uncached_redirect(url_for('admin'))
 

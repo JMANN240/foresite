@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block head %}
+{{ super() }}
+<script src='/static/admin.js' defer></script>
+{% endblock %}
 {% block body %}
 <main class="center">
 	<h1>Admin Dashboard</h1>
@@ -10,10 +14,10 @@
 		{% endfor %}
 		<input type="submit" value="Update" class="btn filled">
 	</form>
-	<h2>Pages</h2>
-	<a href="/admin/create_page" class="btn">Create Page</a>
-	{% for site_page in site_pages %}
-	<a href="/admin{{site_page['route']}}" class="btn">{{site_page['title']}}</a>
+	<h2>Posts</h2>
+	<a href="/admin/create_post" class="btn">Create Post</a>
+	{% for post in posts %}
+	<a href="/admin/post/{{post['post_id']}}" class="btn">{{post['title']}}</a>
 	{% endfor %}
 </main>
 {% endblock %}

@@ -45,6 +45,8 @@
 	</div>
 	{% block header %}
 	<header>
+		<a href="{{url_for('index')}}">Home</a>
+		<span></span>
 		{% for text, link in site_header_links.items() %}
 		<a href="{{link}}">{{text}}</a>
 		<span></span>
@@ -55,6 +57,8 @@
 		<a href="{{url_for('register')}}">Register</a>
 		{% else %}
 		<a href="{{url_for('account')}}">Account</a>
+		<span></span>
+		<a href="{{url_for('logout')}}">Logout</a>
 		{% endif %}
 	</header>
 	{% endblock %}

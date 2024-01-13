@@ -15,7 +15,6 @@ body {
 }
 
 a {
-	text-decoration: none;
 	color: inherit;
 }
 
@@ -43,6 +42,7 @@ header {
 header > a {
 	color: var(--primary);
 	font-weight: 700;
+	text-decoration: none;
 }
 
 header > span {
@@ -102,11 +102,17 @@ h1, h2, h3 {
 }
 
 .huge {
-	font-size: 4rem;
+	font-size: 3rem;
 }
 
 p, li {
 	margin: 0.25rem;
+}
+
+hr {
+	width: 100%;
+	border: 2px solid var(--primary);
+	border-radius: 2px;
 }
 
 .text-faded {
@@ -185,7 +191,7 @@ form {
 }
 
 input[type=email], input[type=text], input[type=password], .radio-label {
-	width: max(16ch, 40%);
+	width: max(32ch, 80%);
 }
 
 textarea {
@@ -236,22 +242,22 @@ div.popup.error {
 
 @keyframes fade_up {
 	0% {
-		transform: translateY(2rem);
+		transform: translateY(2.5rem);
 		opacity: 0;
 	}
 
 	20% {
-		transform: translateY(0);
+		transform: translateY(0.5rem);
 		opacity: 1;
 	}
 
 	80% {
-		transform: translateY(0);
+		transform: translateY(0.5rem);
 		opacity: 1;
 	}
 
 	100% {
-		transform: translateY(-2rem);
+		transform: translateY(-1.5rem);
 		opacity: 0;
 	}
 }

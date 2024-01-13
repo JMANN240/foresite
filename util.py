@@ -102,6 +102,9 @@ def button_line_replacement(match):
 	html += '</div>'
 	return html
 
+def hr_line_replacement(match):
+	return f"<hr>"
+
 def p_line_replacement(match):
 	return f"<p>{match.group(1)}</p>"
 
@@ -114,6 +117,7 @@ def renderMarkdown(markdown):
 		h2_line = MarkdownLineMatcher('^### (.+)$', h2_line_replacement)
 		image_line = MarkdownLineMatcher('^\[(.+)\]$', image_line_replacement)
 		button_line = MarkdownLineMatcher('^(?:\(.+?\|.+?\) ?)+$', button_line_replacement)
+		hr_line = MarkdownLineMatcher('^---$', hr_line_replacement)
 		p_line = MarkdownLineMatcher('^(.+)$', p_line_replacement)
 
 		line_res = (
@@ -122,6 +126,7 @@ def renderMarkdown(markdown):
 			h2_line,
 			image_line,
 			button_line,
+			hr_line,
 			p_line
 		)
 
