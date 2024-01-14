@@ -2,3 +2,4 @@ __pycache__/
 env/
 database.db
 static/favicon-32.png
+config.py

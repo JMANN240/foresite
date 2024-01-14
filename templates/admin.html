@@ -16,6 +16,7 @@
 	</form>
 	<h2>Posts</h2>
 	<a href="/admin/create_post" class="btn">Create Post</a>
+	<a href="/admin/generate_post" class="btn">Generate Post</a>
 	{% for post in posts %}
 	<a href="/admin/post/{{post['post_id']}}" class="btn">{{post['title']}}</a>
 	{% endfor %}

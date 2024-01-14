@@ -4,6 +4,9 @@ import os
 from util import *
 from crud import *
 import time
+import write
+from config import *
+from openai import OpenAI
 
 app = Flask(__name__)
 app.secret_key = os.urandom(64)
@@ -266,6 +269,29 @@ def createPost():
 		createPostNow(cur, request.form['title'], request.form['author'], request.form['content'], request.form['summary'])
 		con.commit()
 		return uncached_redirect(url_for('admin'))
+
+@app.route('/admin/generate_post')
+@requires_authority(1)
+@requires_db
+def generatePost():
+	con = request.db
+	cur = con.cursor()
+	client = OpenAI(api_key=OPENAI_API_KEY)
+	site_settings = getSiteSettings(cur)
+	post = write.generatePostTopics(client, site_settings['name'], site_settings['topic'], 1)[0]
+
+	content = ""
+
+	sections = write.generatePostSections(client, site_settings['name'], site_settings['topic'], post['title'], post['summary'])
+	for section in sections:
+		content += f"## {section['title']}\n\n"
+		section_paragraphs = write.generateSectionContent(client, site_settings['name'], site_settings['topic'], post['title'], post['summary'], section['title'], section['summary'])
+		for section_paragraph in section_paragraphs:
+			content += f"{section_paragraph}\n\n"
+
+	createPostNow(cur, post['title'], 'Theodore Bellamy', content, post['summary'])
+	con.commit()
+	return uncached_redirect(url_for('admin'))
 
 if __name__ == '__main__':
 	app.run('0.0.0.0', 5000, debug=True)
