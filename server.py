@@ -3,6 +3,7 @@ import hashlib
 import os
 from util import *
 from crud import *
+import time
 
 app = Flask(__name__)
 app.secret_key = os.urandom(64)
@@ -15,7 +16,8 @@ def inject_user_session():
 	site_settings = getSiteSettings(cur)
 	site_header_links = getSiteHeaderLinks(cur)
 	posts = getPosts(cur)
-	return dict(user_session=user_session, site_settings=site_settings, site_header_links=site_header_links, posts=posts)
+	year = time.strftime('%Y')
+	return dict(user_session=user_session, site_settings=site_settings, site_header_links=site_header_links, posts=posts, year=year)
 
 @app.errorhandler(404)
 def notFound(e):
@@ -39,7 +41,7 @@ def post(id):
 	post = getPostById(cur, id)
 	if post is None:
 		abort(404)
-	content = f"# {post['title']}\n\nBy {post['author']}\n\n---\n\n{post['content']}"
+	content = f"# {post['title']}\n\nWritten by {post['author']} on {time.strftime('%x', time.localtime(post['timestamp']))}\n\n---\n\n{post['content']}"
 	return render_template('post.html', main=renderMarkdown(content), title=post['title'])
 
 @app.route('/support')

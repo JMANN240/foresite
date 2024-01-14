@@ -46,21 +46,22 @@
 	</div>
 	{% block header %}
 	<header>
-		<a href="{{url_for('index')}}">Home</a>
-		<span></span>
-		{% for text, link in site_header_links.items() %}
-		<a href="{{link}}">{{text}}</a>
-		<span></span>
-		{% endfor %}
-		{% if user_session is none %}
-		<a href="{{url_for('login')}}">Login</a>
-		<span></span>
-		<a href="{{url_for('register')}}">Register</a>
-		{% else %}
-		<a href="{{url_for('account')}}">Account</a>
-		<span></span>
-		<a href="{{url_for('logout')}}">Logout</a>
-		{% endif %}
+		<a href="{{url_for('index')}}"><h2>{{site_settings['name']}}</h2></a>
+		<nav>
+			{% for text, link in site_header_links.items() %}
+			<a href="{{link}}">{{text}}</a>
+			<span></span>
+			{% endfor %}
+			{% if user_session is none %}
+			<a href="{{url_for('login')}}">Login</a>
+			<span></span>
+			<a href="{{url_for('register')}}">Register</a>
+			{% else %}
+			<a href="{{url_for('account')}}">Account</a>
+			<span></span>
+			<a href="{{url_for('logout')}}">Logout</a>
+			{% endif %}
+		</nav>
 	</header>
 	{% endblock %}
 	{% block body %}
@@ -69,7 +70,7 @@
 	{% endblock %}
 	{% block footer %}
 	<footer class="smaller">
-		<p>&copy; 2023 {{site_settings['name']}}</p>
+		<p>&copy; {{year}} {{site_settings['name']}}</p>
 		<p>
 			<a class="underlined" href="{{url_for('support')}}">Support</a>
 			<a class="underlined" href="{{url_for('terms')}}">Terms and Conditions</a>

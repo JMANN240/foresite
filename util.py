@@ -15,20 +15,6 @@ def get_db():
 	con.row_factory = dict_factory
 	return con
 
-def sendSystemMessage(message):
-	res = None
-	while res is None:
-		try:
-			res = openai.ChatCompletion.create(model='gpt-3.5-turbo-16k', messages=[
-				{
-					"role": "system",
-					"content": message
-				}
-			]).choices[0].message.content
-		except openai.error.ServiceUnavailableError:
-			pass
-	return res
-
 def uncached_redirect(location, code=303):
 	res = make_response(redirect(location, code=code))
 	res.cache_control.max_age = 0

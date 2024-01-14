@@ -34,18 +34,28 @@ header {
 	padding: 1rem;
 	background-color: var(--secondary);
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 	border-bottom: 4px solid var(--primary);
 }
 
-header > a {
+header h2 {
+	margin: 0;
+}
+
+nav {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+header a {
 	color: var(--primary);
 	font-weight: 700;
 	text-decoration: none;
 }
 
-header > span {
+nav span {
 	width: 2px;
 	height: 1.25em;
 	margin: 0 0.5rem;
