@@ -24,10 +24,12 @@
 
 	<style>
 		:root {
-			--primary: {{site_settings['primary-color']}};
-			--secondary: {{site_settings['secondary-color']}};
-			--tertiary: {{site_settings['tertiary-color']}};
+			--fg: {{site_settings['text-color']}};
+			--bg: {{site_settings['background-color']}};
+			--accent: {{site_settings['accent-color']}};
 			--danger: {{site_settings['danger-color']}};
+			--lines: {{site_settings['lines-color']}};
+			--footer: {{site_settings['footer-color']}};
 		}
 	</style>
 	{% endblock %}
@@ -69,12 +71,12 @@
 	</main>
 	{% endblock %}
 	{% block footer %}
-	<footer class="smaller">
+	<footer>
 		<p>&copy; {{year}} {{site_settings['name']}}</p>
 		<p>
-			<a class="underlined" href="{{url_for('support')}}">Support</a>
-			<a class="underlined" href="{{url_for('terms')}}">Terms and Conditions</a>
-			<a class="underlined" href="{{url_for('privacy')}}">Privacy Policy</a>
+			<a href="{{url_for('support')}}">Support</a>
+			<a href="{{url_for('terms')}}">Terms and Conditions</a>
+			<a href="{{url_for('privacy')}}">Privacy Policy</a>
 		</p>
 	</footer>
 	{% endblock %}

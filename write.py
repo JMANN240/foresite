@@ -12,14 +12,16 @@ def generateName(client, blog_topic):
 			]
 		).choices[0].message.content)['name']
 
-def generatePostTopics(client, blog_name, blog_topic, number_of_posts):
+def generatePostTopics(client, blog_name, blog_topic, number_of_posts, previous_posts):
+	posts = " ".join([f"{previous_post['title']}, which is summarized as \"{previous_post['summary']}\"." for previous_post in previous_posts])
+	print(posts)
 	return json.loads(
 		client.chat.completions.create(
 			model='gpt-3.5-turbo-1106',
 			response_format={'type': 'json_object'},
 			messages=[
-				{'role': 'system', 'content': "You generate blog posts based on what the blog is called and about. Be creative and not too cheesy or cliché. The name should be modern, sophisticated, and sleek. You must respond in JSON format as follows: \{'posts':[POST OBJECTS]\} where each POST OBJECT consists of a 'title' and 'summary'."},
-				{'role': 'user', 'content': f"Generate me {number_of_posts} unqiue posts for a blog named {blog_name} about {blog_topic}"},
+				{'role': 'system', 'content': "You generate blog posts based on what the blog is called and about. Be creative and not too cheesy or cliché. The name should be modern, sophisticated, and sleek. You must not repeat posts that the user says you have already generated. You must respond in JSON format as follows: \{'posts':[POST OBJECTS]\} where each POST OBJECT consists of a 'title' and 'summary'."},
+				{'role': 'user', 'content': f"Generate me {number_of_posts} unqiue posts for a blog named {blog_name} about {blog_topic}. You have already generated the following posts: {posts}"},
 			]
 		).choices[0].message.content)['posts']
 
@@ -40,7 +42,7 @@ def generateSectionContent(client, blog_name, blog_topic, post_title, post_summa
 			model='gpt-3.5-turbo-1106',
 			response_format={'type': 'json_object'},
 			messages=[
-				{'role': 'system', 'content': "You generate the content for a section of a blog post based on what the blog is called and about, what the post is titled, a brief summary of the post, the section title, and a brief summary of the section. Be creative and not too cheesy or cliché. The tone should be modern, sophisticated, and sleek. You should generate 4 to 6 paragraphs of content. Each paragraph is separated by 2 line breaks. You must respond in JSON format as follows: \{'paragraphs':[PARAGRAPH STRINGS]\} where each PARAGRAPH STRING is 3 to 4 sentences long."},
+				{'role': 'system', 'content': "You generate the content for a section of a blog post based on what the blog is called and about, what the post is titled, a brief summary of the post, the section title, and a brief summary of the section. Be creative and not too cheesy or cliché. The tone should be modern, sophisticated, and sleek. You should generate 2 to 4 paragraphs of content. Each paragraph is separated by 2 line breaks. You must respond in JSON format as follows: \{'paragraphs':[PARAGRAPH STRINGS]\} where each PARAGRAPH STRING is 3 to 4 sentences long."},
 				{'role': 'user', 'content': f"Generate me content for a section in a post for a blog named {blog_name} about {blog_topic}. The post is titled {post_title} and a brief summary of the post is '{post_summary}'. The section is titled {section_title} and a brief summary of the section is {section_summary}"},
 			]
 		).choices[0].message.content)['paragraphs']

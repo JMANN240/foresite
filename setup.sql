@@ -30,11 +30,11 @@ CREATE TABLE site_settings (
 );
 
 INSERT INTO site_settings (key, value) VALUES ('name', 'ForeSite');
-INSERT INTO site_settings (key, value) VALUEs ('primary-color', '#e0e0e0');
-INSERT INTO site_settings (key, value) VALUEs ('secondary-color', '#202020');
-INSERT INTO site_settings (key, value) VALUEs ('tertiary-color', '#a0a0a0');
-INSERT INTO site_settings (key, value) VALUEs ('danger-color', '#f08080');
 INSERT INTO site_settings (key, value) VALUEs ('topic', 'blogs');
+INSERT INTO site_settings (key, value) VALUEs ('text-color', '#e0e0e0');
+INSERT INTO site_settings (key, value) VALUEs ('background-color', '#202020');
+INSERT INTO site_settings (key, value) VALUEs ('accent-color', '#a0a0a0');
+INSERT INTO site_settings (key, value) VALUEs ('danger-color', '#f08080');
 
 CREATE TABLE site_header_links (
 	text TEXT NOT NULL,
